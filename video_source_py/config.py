@@ -1,3 +1,4 @@
+from enum import Enum
 from pathlib import Path
 from typing import Optional
 
@@ -6,6 +7,10 @@ from pydantic_settings import BaseSettings, SettingsConfigDict
 from typing_extensions import Annotated
 from visionlib.pipeline.settings import LogLevel, YamlConfigSettingsSource
 
+
+class HardwareVideoDecoder(str, Enum):
+    NONE = 'NONE'
+    NVIDIA_GSTREAMER = 'NVIDIA_GSTREAMER'
 
 class RedisConfig(BaseModel):
     host: str = 'localhost'
@@ -30,6 +35,7 @@ class VideoSourceConfig(BaseSettings):
     camera_position_source: Optional[PositionSourceConfiguration] = None
     redis: RedisConfig = RedisConfig()
     prometheus_port: Annotated[int, Field(gt=1024, le=65536)] = 8000
+    hw_video_decoder: HardwareVideoDecoder = HardwareVideoDecoder.NONE
 
     model_config = SettingsConfigDict(env_nested_delimiter='__')
 

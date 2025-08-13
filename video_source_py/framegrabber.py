@@ -1,22 +1,25 @@
 import logging
 import time
 from collections import deque
-from threading import Event, RLock, Thread
-from prometheus_client import Counter, Summary
+from threading import Event, Thread
 
 import cv2
+from prometheus_client import Counter, Summary
+
+from .config import HardwareVideoDecoder
 
 FRAME_COUNTER = Counter('frame_grabber_frame_counter', 'The number of frames that were retrieved from the video stream')
 FRAME_LOOP_DURATION = Summary('frame_grabber_loop_duration', 'The time between calls to VideoCapture.read()')
 
 class FrameGrabber(Thread):
-    def __init__(self, uri: str, reconnect_backoff_time: float = 1.0) -> None:
+    def __init__(self, uri: str, reconnect_backoff_time: float = 1.0, video_decoder: HardwareVideoDecoder = HardwareVideoDecoder.NONE) -> None:
         super().__init__(name=__name__, target=self._main_loop)
         self._frame_deque = deque(maxlen=1)
         self._stop_event = Event()
 
         self._uri = uri
         self._reconnect_backoff_time = reconnect_backoff_time
+        self._video_decoder = video_decoder
 
         self._logger = logging.getLogger(__name__)
 
@@ -52,7 +55,7 @@ class FrameGrabber(Thread):
 
     def _ensure_connection(self):
         if self._cap is None:
-            self._cap = cv2.VideoCapture(self._uri)
+            self._cap = self._open_capture()
             if self._cap.isOpened():
                 self._source_fps = self._cap.get(cv2.CAP_PROP_FPS)
                 self._logger.info(f'Successfully established connection to {self._uri}')
@@ -76,6 +79,19 @@ class FrameGrabber(Thread):
             return False
         
         return True
+    
+    def _open_capture(self):
+        if self._video_decoder == HardwareVideoDecoder.NONE:
+            return cv2.VideoCapture(self._uri)
+        if self._video_decoder == HardwareVideoDecoder.NVIDIA_GSTREAMER:
+            pipeline = (
+                f'rtspsrc location={self._uri} protocols=tcp latency=200 ! '
+                'rtph264depay ! h264parse ! nvv4l2decoder ! '
+                'nvvidconv ! video/x-raw,format=BGRx ! '
+                'videoconvert ! video/x-raw,format=BGR ! '
+                'appsink drop=true sync=false max-buffers=1'
+            )
+            return cv2.VideoCapture(pipeline, cv2.CAP_GSTREAMER)
     
     @property
     def source_fps(self):

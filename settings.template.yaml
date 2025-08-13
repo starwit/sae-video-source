@@ -23,6 +23,9 @@ camera_position_source:
   # if true, frames will be discarded if there is no position or position is stale (according to skew)
   drop_frames_if_no_position: False
 
+# Use hardware facility to decode source video (options: NONE, NVIDIA_GSTREAMER)
+hw_video_decoder: NONE
+
 log_level: DEBUG
 redis:
   host: redis
