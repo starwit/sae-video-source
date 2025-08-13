@@ -6,9 +6,12 @@ if [ "$1" = "configure" ]; then
 
     echo "Create virtual environment for application"
     cd "/opt/starwit/videosource"
-    python3 -m venv .venv
+    python3 -m venv .venv --system-site-packages
     source .venv/bin/activate
     pip install -r requirements.txt 
+
+    # We need to uninstall opencv-python, bc otherwise it is used over the system package
+    pip uninstall -y opencv-python
 
     echo "Create wrapper script"
     mkdir -p /usr/local/bin
