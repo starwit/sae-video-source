@@ -83,7 +83,7 @@ class FrameGrabber(Thread):
     def _open_capture(self):
         if self._video_decoder == HardwareVideoDecoder.NONE:
             return cv2.VideoCapture(self._uri)
-        if self._video_decoder == HardwareVideoDecoder.NVIDIA_GSTREAMER:
+        if self._video_decoder == HardwareVideoDecoder.NVIDIA_JETSON:
             pipeline = (
                 f'rtspsrc location={self._uri} protocols=tcp latency=200 ! '
                 'rtph264depay ! h264parse ! nvv4l2decoder ! '

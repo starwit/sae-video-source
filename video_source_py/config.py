@@ -10,7 +10,7 @@ from visionlib.pipeline.settings import LogLevel, YamlConfigSettingsSource
 
 class HardwareVideoDecoder(str, Enum):
     NONE = 'NONE'
-    NVIDIA_GSTREAMER = 'NVIDIA_GSTREAMER'
+    NVIDIA_JETSON = 'NVIDIA_JETSON'
 
 class RedisConfig(BaseModel):
     host: str = 'localhost'
