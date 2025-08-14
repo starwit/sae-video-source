@@ -29,7 +29,7 @@ EOF
 
     # link settings file from etc
     cd /opt/starwit/videosource
-    ln -s /etc/starwit/videosource/settings.yaml settings.yaml
+    ln -sf /etc/starwit/videosource/settings.yaml settings.yaml
 
     systemctl daemon-reload
     systemctl start videosource.service        
