@@ -52,7 +52,9 @@ class VideoSource:
         return 255 - mask
     
     def start(self):
-        self._framegrabber = FrameGrabber(self.config.uri)
+        self._framegrabber = FrameGrabber(uri=self.config.uri,
+                                          reconnect_backoff_time=self.config.reconnect_backoff_time, 
+                                          video_decoder=self.config.hw_video_decoder)
 
     def __call__(self, *args, **kwargs) -> Any:
         return self.get()
