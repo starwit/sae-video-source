@@ -86,7 +86,7 @@ class FrameGrabber(Thread):
         if self._video_decoder == HardwareVideoDecoder.NVIDIA_JETSON:
             pipeline = (
                 f'rtspsrc location={self._uri} protocols=tcp latency=200 ! '
-                'rtph264depay ! h264parse ! nvv4l2decoder ! '
+                'parsebin ! nvv4l2decoder ! '
                 'nvvidconv ! video/x-raw,format=BGRx ! '
                 'videoconvert ! video/x-raw,format=BGR ! '
                 'appsink drop=true sync=false max-buffers=1'
