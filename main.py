@@ -10,6 +10,9 @@ os.environ["MKL_NUM_THREADS"] = f'{PARALLELSIM}'
 os.environ["VECLIB_MAXIMUM_THREADS"] = f'{PARALLELSIM}'
 os.environ["NUMEXPR_NUM_THREADS"] = f'{PARALLELSIM}'
 
+# force rtsp to tcp (this used to be the default, but now needs to be set)
+os.environ["OPENCV_FFMPEG_CAPTURE_OPTIONS"] = "rtsp_transport;tcp"
+
 # Limit OpenCV and subcomponents to one thread (again, order is important)
 os.environ["OPENCV_FFMPEG_THREADS"] = f'{PARALLELSIM}'
 import cv2
