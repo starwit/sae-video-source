@@ -8,15 +8,15 @@ license = "AGPL3"
 
 [tool.poetry.dependencies]
 python = "^3.10"
-pydantic = "^2.0.0"
+pydantic = "^2.12.5"
 opencv-python = "^4.7.0.72"
 visionapi = { git = "https://github.com/starwit/vision-api.git", subdirectory = "python/visionapi", tag = "3.5.3" }
 visionlib = { git = "https://github.com/starwit/vision-lib.git", subdirectory = "python", tag = "0.14.0" }
 redis = "^5.0.0"
-pydantic-settings = "^2.0.3"
+pydantic-settings = "^2.12.0"
 prometheus-client = ">=0.17.1,<1.0.0"
 pyturbojpeg = "^1.7.2"
-pytest = "8.4.1"
+pytest = "9.0.2"
 
 [build-system]
 requires = ["poetry-core"]
