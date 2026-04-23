@@ -4,12 +4,13 @@ from collections import deque
 from threading import Event, Thread
 
 import cv2
-from prometheus_client import Counter, Summary
+from prometheus_client import Counter, Histogram
 
 from .config import HardwareVideoDecoder
 
 FRAME_COUNTER = Counter('frame_grabber_frame_counter', 'The number of frames that were retrieved from the video stream')
-FRAME_LOOP_DURATION = Summary('frame_grabber_loop_duration', 'The time between calls to VideoCapture.read()')
+FRAME_LOOP_DURATION = Histogram('frame_grabber_loop_duration', 'The time between calls to VideoCapture.read()',
+                                buckets=(0.005, 0.01, 0.02, 0.03, 0.05, 0.075, 0.1, 0.15, 0.2, 0.3, 0.5, 0.75, 1.0))
 
 class FrameGrabber(Thread):
     def __init__(self, uri: str, reconnect_backoff_time: float = 1.0, video_decoder: HardwareVideoDecoder = HardwareVideoDecoder.NONE) -> None:
