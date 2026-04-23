@@ -100,9 +100,9 @@ class VideoSource:
                 msg.frame.camera_location.CopyFrom(position)
             else:
                 if not self.config.camera_position_source.drop_frames_if_no_position:
-                    self._logger.debug('no position data - forwarding detections without position')
+                    self._logger.debug('no position data - forwarding frame without position')
                 else:
-                    self._logger.error('no position data - not processing Detections')
+                    self._logger.error('no position data - dropping frame')
                     return None
 
         msg.type = MessageType.SAE
