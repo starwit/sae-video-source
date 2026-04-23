@@ -118,8 +118,6 @@ class VideoSource:
             time_to_sleep = wait_target - current_time
             if time_to_sleep > 0:
                 time.sleep(time_to_sleep)
-        else:
-            time.sleep(0.01)
 
     def _resize(self, frame, interpolation=cv2.INTER_AREA):
         if self.config.scale_width > 0:

@@ -1,6 +1,7 @@
 import logging
 import signal
 import threading
+import time
 
 from prometheus_client import Histogram, start_http_server
 from visionlib.pipeline.publisher import RedisPublisher
@@ -49,6 +50,8 @@ def run_stage():
                 if image_proto is not None:
                     with REDIS_PUBLISH_DURATION.time():
                         publish(stream_key=f'{CONFIG.redis.output_stream_prefix}:{CONFIG.id}', proto_data=image_proto)
+                else:
+                    time.sleep(0.005)
     except Exception as e:
         logger.error('Exception in main loop', exc_info=True)
     finally:
