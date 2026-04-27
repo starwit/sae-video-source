@@ -30,3 +30,9 @@ However, as this implementation had a major bug of not getting frames fast enoug
 If necessary, you can always use a streaming server (like mediamtx) to serve a local file as a RTSP stream.
 
 The current implementation retrieves frames from the incoming stream as fast as possible (the loop is very simple) in order to clear the TCP receive buffer as quickly as possible. **Consequentially, you should not use this component directly on a video file anymore, it will just hog one core of your CPU and you will probably lose a lot of frames!**
+
+## Changelog
+### 2.3.3
+- Fix 100% CPU load in certain failure modes (e.g. "no route to host")
+- Decrease CPU load in all scenarios due to less busy waiting
+- Decrease camera connection timeout (makes errors more visible and recovery faster)
